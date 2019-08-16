@@ -47,8 +47,12 @@
 		
 		<mvc:interceptors>
 			<mvc:interceptor>
-				<mvc:mapping path="/sys/**"/>
-				<bean class="org.smbms.interceptor.SysInterceptor"></bean>
+				<mvc:mapping path="/backend/**"/>
+				<bean class="cn.app.interceptor.BackendInterceptor"></bean>
+			</mvc:interceptor>
+			<mvc:interceptor>
+				<mvc:mapping path="/dev/**"/>
+				<bean class="cn.app.interceptor.DevInterceptor"></bean>
 			</mvc:interceptor>
 		</mvc:interceptors>
 		
