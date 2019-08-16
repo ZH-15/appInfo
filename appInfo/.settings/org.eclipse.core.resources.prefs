@@ -1,5 +1,9 @@
 eclipse.preferences.version=1
 encoding//WebRoot/403.jsp=UTF-8
-encoding//WebRoot/statics/js/jquery.min.js=UTF-8
+encoding//WebRoot/WEB-INF/jsp/BackendLogin.jsp=UTF-8
+encoding//WebRoot/WEB-INF/jsp/DevUserLogin.jsp=UTF-8
+encoding//WebRoot/WEB-INF/jsp/dev/DevMain.jsp=UTF-8
+encoding//WebRoot/WEB-INF/jsp/dev/appList.jsp=UTF-8
+encoding//WebRoot/index.jsp=UTF-8
 encoding//src/cn/app/pojo=UTF-8
 encoding/<project>=UTF-8
