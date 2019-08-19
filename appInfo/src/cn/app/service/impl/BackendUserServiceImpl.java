@@ -9,7 +9,7 @@ import cn.app.pojo.BackendUser;
 import cn.app.pojo.DevUser;
 import cn.app.service.BackendUserService;
 
-@Service
+@Service("BackendUserService")
 public class BackendUserServiceImpl implements BackendUserService {
 
 	@Resource

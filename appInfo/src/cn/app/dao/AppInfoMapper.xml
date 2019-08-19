@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="cn.app.dao.AppInfoMapper">
+ 	<select id="findAppInfoCount" resultType="int">
+ 		SELECT COUNT(1) FROM `app_info`
+		<where>
+			<if test="querySoftwareName != null and querySoftwareName != ''">
+				AND `softwareName` LIKE CONCAT ('%',#{querySoftwareName},'%') 
+			</if>
+			<if test="queryStatus != null and queryStatus != ''">
+				AND `status` = #{queryStatus} 
+			</if>
+			<if test="queryFlatformId != null and queryFlatformId != ''">
+				AND `flatformId` = #{queryFlatformId} 
+			</if>
+			<if test="queryCategoryLevel1 != null and queryCategoryLevel1 != ''">
+				AND `categoryLevel1` = #{queryCategoryLevel1} 
+			</if>
+			<if test="queryCategoryLevel2 != null and queryCategoryLevel2 != ''">
+				AND `categoryLevel2` = #{queryCategoryLevel2} 
+			</if>
+			<if test="queryCategoryLevel3 != null and queryCategoryLevel3 != ''">
+				AND `categoryLevel3` = #{queryCategoryLevel3} 
+			</if>
+		</where>
+ 	</select>
+ 	
+ 	<select id="findAppInfoList" resultType="AppInfo">
+ 		SELECT i.*,
+		(SELECT d.valueName FROM `data_dictionary` d 
+		WHERE d.`valueId`=i.`status` AND d.`typeCode`= 'APP_STATUS') 
+		AS statusName,
+		(SELECT d.valueName FROM `data_dictionary` d 
+		WHERE d.`valueId`=i.`status` AND d.`typeCode`= 'APP_FLATFORM')
+		AS flatformName,
+		(SELECT u.devName FROM `dev_user` u WHERE u.id = i.`devId`)
+		AS devName,
+		(SELECT v.versionNo FROM `app_version` v WHERE v.id = i.`versionId`)
+		AS versionNo,
+		(SELECT `categoryName` FROM `app_category` c WHERE c.id = i.`categoryLevel1`)
+		AS categoryLevel1Name,
+		(SELECT `categoryName` FROM `app_category` c WHERE c.id = i.`categoryLevel2`)
+		AS categoryLevel2Name,
+		(SELECT `categoryName` FROM `app_category` c WHERE c.id = i.`categoryLevel3`)
+		AS categoryLevel3Name
+		FROM `app_info` i
+		<where>
+			<if test="querySoftwareName != null and querySoftwareName != ''">
+				AND `softwareName` LIKE CONCAT ('%',#{querySoftwareName},'%') 
+			</if>
+			<if test="queryStatus != null and queryStatus != ''">
+				AND `status` = #{queryStatus} 
+			</if>
+			<if test="queryFlatformId != null and queryFlatformId != ''">
+				AND `flatformId` = #{queryFlatformId} 
+			</if>
+			<if test="queryCategoryLevel1 != null and queryCategoryLevel1 != ''">
+				AND `categoryLevel1` = #{queryCategoryLevel1} 
+			</if>
+			<if test="queryCategoryLevel2 != null and queryCategoryLevel2 != ''">
+				AND `categoryLevel2` = #{queryCategoryLevel2} 
+			</if>
+			<if test="queryCategoryLevel3 != null and queryCategoryLevel3 != ''">
+				AND `categoryLevel3` = #{queryCategoryLevel3} 
+			</if>
+		</where>
+		LIMIT #{from},#{pageSize}
+ 	</select>
+ </mapper>
