@@ -67,4 +67,71 @@
 		</where>
 		LIMIT #{from},#{pageSize}
  	</select>
+ 	
+ 	<select id="findAppInfoByAPKName" resultType="int">
+ 		SELECT COUNT(1) FROM `app_info` WHERE APKName = #{APKName}
+ 	</select>
+ 	
+ 	<insert id="insertAppInfo" parameterType="AppInfo">
+ 		INSERT INTO app_info (softwareName,APKName,supportROM,interfaceLanguage,updateDate,softwareSize,
+		devId,appInfo,status,onSaleDate,offSaleDate,categoryLevel1,categoryLevel2,
+		categoryLevel3,downloads,flatformId,logoPicPath,logoLocPath,createdBy,creationDate)
+		VALUES (#{softwareName},#{APKName},#{supportROM},#{interfaceLanguage},#{updateDate},
+		#{softwareSize},#{devId},#{appInfo},#{status},#{onSaleDate},#{offSaleDate},
+		#{categoryLevel1},#{categoryLevel2},#{categoryLevel3},#{downloads},
+		#{flatformId},#{logoPicPath},#{logoLocPath},#{createdBy},#{creationDate})
+ 	</insert>
+ 	
+ 	<select id="findAppInfoById" resultType="AppInfo">
+ 		SELECT i.*,
+		(SELECT d.valueName FROM `data_dictionary` d 
+		WHERE d.`valueId`=i.`status` AND d.`typeCode`= 'APP_STATUS') 
+		AS statusName,
+		(SELECT d.valueName FROM `data_dictionary` d 
+		WHERE d.`valueId`=i.`status` AND d.`typeCode`= 'APP_FLATFORM')
+		AS flatformName,
+		(SELECT u.devName FROM `dev_user` u WHERE u.id = i.`devId`)
+		AS devName,
+		(SELECT v.versionNo FROM `app_version` v WHERE v.id = i.`versionId`)
+		AS versionNo,
+		(SELECT `categoryName` FROM `app_category` c WHERE c.id = i.`categoryLevel1`)
+		AS categoryLevel1Name,
+		(SELECT `categoryName` FROM `app_category` c WHERE c.id = i.`categoryLevel2`)
+		AS categoryLevel2Name,
+		(SELECT `categoryName` FROM `app_category` c WHERE c.id = i.`categoryLevel3`)
+		AS categoryLevel3Name
+		FROM `app_info` i
+		WHERE id = #{id}
+ 	</select>
+ 	
+ 	<update id="updateApplogo">
+ 		UPDATE `app_info`
+		SET logoPicPath = NULL,logoLocPath = NULL
+		WHERE id = #{id}
+ 	</update>
+ 	
+ 	<update id="updateAppInfo" parameterType="AppInfo">
+ 		UPDATE app_info
+		<trim prefix="set" suffixOverrides="," suffix="where id=#{id}">
+			<if test="softwareName != null">softwareName=#{softwareName},</if>
+			<!-- <if test="APKName != null">APKName=#{APKName},</if> -->
+			<if test="supportROM != null">supportROM=#{supportROM},</if>
+			<if test="interfaceLanguage != null">interfaceLanguage=#{interfaceLanguage},</if>
+			<if test="updateDate != null">updateDate=#{updateDate},</if>
+			<if test="softwareSize != null">softwareSize=#{softwareSize},</if>
+			<if test="appInfo != null">appInfo=#{appInfo},</if>
+			<if test="status != null">status=#{status},</if>
+			<if test="onSaleDate != null">onSaleDate=#{onSaleDate},</if>
+			<if test="offSaleDate != null">offSaleDate=#{offSaleDate},</if>
+			<if test="categoryLevel1 != null">categoryLevel1=#{categoryLevel1},</if>
+			<if test="categoryLevel2 != null">categoryLevel2=#{categoryLevel2},</if>
+			<if test="categoryLevel3 != null">categoryLevel3=#{categoryLevel3},</if>
+			<if test="downloads != null">downloads=#{downloads},</if>
+			<if test="flatformId != null">flatformId=#{flatformId},</if>
+			<if test="logoPicPath != null">logoPicPath=#{logoPicPath},</if>
+			<if test="logoLocPath != null">logoLocPath=#{logoLocPath},</if>
+			<if test="modifyBy != null">modifyBy=#{modifyBy},</if>
+			<if test="modifyDate != null">modifyDate=#{modifyDate},</if>
+		</trim>
+ 	</update>
  </mapper>

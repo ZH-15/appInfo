@@ -94,7 +94,7 @@ $(function(){
 	});
 	
 	$("#back").on("click",function(){
-		window.location.href = "list";
+		window.location.href = "appList.html";
 	});
 	
 	$("#APKName").bind("blur",function(){
@@ -105,12 +105,13 @@ $(function(){
 			data:{APKName:$("#APKName").val()},//请求参数
 			dataType:"json",//ajax接口（请求url）返回的数据类型
 			success:function(data){//data：返回数据（json对象）
+				var APKNameTips = $("#APKNameTips");
 				if(data.APKName == "empty"){//参数APKName为空，错误提示
-					alert("APKName为不能为空！");
+					APKNameTips.html("APKName为不能为空！");
 				}else if(data.APKName == "exist"){//账号不可用，错误提示
-					alert("该APKName已存在，不能使用！");
+					APKNameTips.html("该APKName已存在，不能使用！");
 				}else if(data.APKName == "noexist"){//账号可用，正确提示
-					alert("该APKName可以使用！");
+					APKNameTips.html("该APKName可以使用！");
 				}
 			},
 			error:function(data){//当访问时候，404，500 等非200的错误状态码
@@ -118,7 +119,16 @@ $(function(){
 			}
 		});
 	});
-
+	
+	$("#form").submit(function(){
+		var APKNameTips = $("#APKNameTips");
+		if(APKNameTips.html()=="该APKName可以使用！"){
+			return true;
+		}else{
+			$("#APKName").focus();
+			return false;
+		}
+	})
 });
       
       

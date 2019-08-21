@@ -44,4 +44,39 @@ public interface AppInfoMapper {
 			@Param("queryCategoryLevel2")Integer queryCategoryLevel2,
 			@Param("queryCategoryLevel3")Integer queryCategoryLevel3,
 			@Param("from")int from,@Param("pageSize")int pageSize);
+	
+	/**
+	 * 查找有没有重复的APKName
+	 * @param apkName
+	 * @return
+	 */
+	public int findAppInfoByAPKName(@Param("APKName") String apkName);
+	
+	/**
+	 * 添加APP信息
+	 * @param appInfo
+	 * @return
+	 */
+	public int insertAppInfo(AppInfo appInfo);
+	
+	/**
+	 * 根据id查找app信息
+	 * @param id
+	 * @return
+	 */
+	public AppInfo findAppInfoById(@Param("id")int id);
+	
+	/**
+	 * 根据id删除app图片
+	 * @param id
+	 * @return
+	 */
+	public int updateApplogo(@Param("id")int id);
+	
+	/**
+	 * 修改APP
+	 * @param appInfo
+	 * @return
+	 */
+	public int updateAppInfo(AppInfo appInfo);
 }

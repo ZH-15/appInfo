@@ -106,7 +106,7 @@ $(function(){
 	});
 	
 	$("#back").on("click",function(){
-		window.location.href = "list";
+		window.location.href = "appList.html";
 	});
 	
 	
@@ -120,7 +120,7 @@ $(function(){
 							"<a href=\"javascript:;\" onclick=\"delfile('"+id+"');\">删除</a></p>");
 		
 	}
-
+	
 });
       
       

@@ -32,4 +32,47 @@ public class AppInfoServiceImpl implements AppInfoService {
 		return appInfoMapper.findAppInfoList(querySoftwareName, queryStatus, queryFlatformId, queryCategoryLevel1, queryCategoryLevel2, queryCategoryLevel3, from, pageSize);
 	}
 
+	@Override
+	public boolean findAppInfoByAPKName(String apkName) {
+		if(appInfoMapper.findAppInfoByAPKName(apkName) >= 1)
+		{
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean insertAppInfo(AppInfo appInfo) {
+		if(appInfoMapper.insertAppInfo(appInfo) >= 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public AppInfo findAppInfoById(int id) {
+		// TODO Auto-generated method stub
+		return appInfoMapper.findAppInfoById(id);
+	}
+
+	@Override
+	public boolean updateApplogo(int id) {
+		if(appInfoMapper.updateApplogo(id) >= 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updateAppInfo(AppInfo appInfo) {
+		if(appInfoMapper.updateAppInfo(appInfo) >=1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 }

@@ -40,4 +40,39 @@ public interface AppInfoService {
 			Integer queryCategoryLevel2,
 			Integer queryCategoryLevel3,
 			int from,int pageSize);
+	
+	/**
+	 * 查找有没有重复的APKName
+	 * @param apkName
+	 * @return
+	 */
+	public boolean findAppInfoByAPKName(String apkName);
+	
+	/**
+	 * 添加APP信息
+	 * @param appInfo
+	 * @return
+	 */
+	public boolean insertAppInfo(AppInfo appInfo);
+	
+	/**
+	 * 根据id查找app信息
+	 * @param id
+	 * @return
+	 */
+	public AppInfo findAppInfoById(int id);
+	
+	/**
+	 * 根据id删除app图片
+	 * @param id
+	 * @return
+	 */
+	public boolean updateApplogo(int id);
+	
+	/**
+	 * 修改APP
+	 * @param appInfo
+	 * @return
+	 */
+	public boolean updateAppInfo(AppInfo appInfo);
 }
