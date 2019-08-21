@@ -75,4 +75,12 @@ public class AppInfoServiceImpl implements AppInfoService {
 		}
 	}
 
+	@Override
+	public boolean updateAppInfoStatus(int id, String method) {
+		if(appInfoMapper.updateAppInfoStatus(id, method) != 0){
+			return true;
+		}
+		return false;
+	}
+
 }

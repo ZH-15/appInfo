@@ -79,4 +79,20 @@ public interface AppInfoMapper {
 	 * @return
 	 */
 	public int updateAppInfo(AppInfo appInfo);
+	
+	/**
+	 * 更改最新版本
+	 * @param id
+	 * @param versionId
+	 * @return
+	 */
+	public int updateAppInfoVersionId(@Param("id")int id,@Param("versionId")int versionId);
+	
+	/**
+	 * APP上下架
+	 * @param id
+	 * @param method
+	 * @return
+	 */
+	public int updateAppInfoStatus(@Param("id")int id,@Param("method")String method);
 }

@@ -134,4 +134,23 @@
 			<if test="modifyDate != null">modifyDate=#{modifyDate},</if>
 		</trim>
  	</update>
+ 	
+ 	<update id="updateAppInfoVersionId">
+ 		UPDATE `app_info`
+		SET versionId = #{versionId}
+		WHERE id = #{id}
+ 	</update>
+ 	
+ 	<update id="updateAppInfoStatus">
+ 		UPDATE `app_info`
+ 		<set>
+ 			<if test="method == 'open'">				
+				`status` = 4,
+ 			</if>
+ 			<if test="method == 'close'">				
+				`status` = 5,
+ 			</if>
+ 		</set>
+		WHERE id = #{id}
+ 	</update>
  </mapper>

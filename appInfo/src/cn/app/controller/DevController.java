@@ -21,10 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import cn.app.pojo.AppCategory;
 import cn.app.pojo.AppInfo;
+import cn.app.pojo.AppVersion;
 import cn.app.pojo.DataDictionary;
 import cn.app.pojo.DevUser;
 import cn.app.service.AppCategoryService;
 import cn.app.service.AppInfoService;
+import cn.app.service.AppVersionService;
 import cn.app.service.DataDictionaryService;
 import cn.app.util.Constants;
 import cn.app.util.PageSupport;
@@ -41,6 +43,8 @@ public class DevController {
 	private AppCategoryService appCategoryService;
 	@Resource
 	private AppInfoService appInfoService;
+	@Resource
+	private AppVersionService appVersionService;
 	
 	@RequestMapping("/main.html")
 	public String main(){
@@ -224,6 +228,15 @@ public class DevController {
 					map.put("result", "failed");
 				}
 			}
+		}else if(flag.equals("apk")){
+			File file = new File(appVersionService.findAppVersionById(id).getApkLocPath());
+			if(file.delete()){
+				if(appVersionService.updateApk(id)){
+					map.put("result", "success");
+				}else{
+					map.put("result", "failed");
+				}
+			}
 		}
 		return map;
 	}
@@ -283,5 +296,138 @@ public class DevController {
 			}else{
 				return url;
 			}
+	}
+	
+	@RequestMapping("appversionadd.html")
+	public String toAppversionAdd(@RequestParam("id")Integer id,
+			@ModelAttribute AppVersion appVersion,HttpServletRequest request){
+		List<AppVersion> appVersions = appVersionService.findAppVersionsByAPPId(id);
+		request.setAttribute("appVersionList", appVersions);
+		appVersion.setAppId(id);
+		return "dev/appversionadd";
+	}
+	
+	@RequestMapping("addversionsave.html")
+	public String AddversionSave(AppVersion appVersion,
+			@RequestParam(value="a_downloadLink",required=false)MultipartFile multipartFile,
+			HttpServletRequest request,HttpSession session){
+		String downLoadPath =  null;
+		String apkLocPath =  null;
+		String fileName=null;
+		String url = "dev/appversionadd";
+		
+		if(!multipartFile.isEmpty()){
+			String path = request.getSession().getServletContext().getRealPath("statics"+java.io.File.separator+"uploadfiles");
+			logger.info("uploadFile path: " + path);
+			String oldFileName = multipartFile.getOriginalFilename();//原文件名
+			String prefix = FilenameUtils.getExtension(oldFileName);//原文件后缀
+			if(prefix.equalsIgnoreCase("apk")){//上传图片格式
+				 fileName = appInfoService.findAppInfoById(appVersion.getAppId()).getSoftwareName()
+						 +appVersion.getVersionNo() + ".apk";//上传LOGO图片命名:apk名称.apk
+				 File targetFile = new File(path,fileName);
+				 if(!targetFile.exists()){
+					 targetFile.mkdirs();
+				 }
+				 try {
+					 multipartFile.transferTo(targetFile);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					request.setAttribute("fileUploadError", "上传文件失败");
+					return url;
+				} 
+				 downLoadPath = request.getContextPath()+"/statics/uploadfiles/"+fileName;
+				 apkLocPath = path+File.separator+fileName;
+			}else{
+				request.setAttribute("fileUploadError", "文件格式不正确");
+				return url;
+			}
+		}
+		DevUser devUser = (DevUser) session.getAttribute(Constants.DEV_USER);
+		appVersion.setCreatedBy(devUser.getId());
+		appVersion.setCreationDate(new Date());
+		appVersion.setDownloadLink(downLoadPath);
+		appVersion.setApkLocPath(apkLocPath);
+		appVersion.setApkFileName(fileName);
+		if(appVersionService.insertAppVersion(appVersion)){
+			return "redirect:/dev/appList.html";
+		}
+		return url;
+	}
+	
+	@RequestMapping("appversionmodify.html")
+	public String toAppVersionModify(@RequestParam("vid")Integer vid,@RequestParam("aid")Integer aid,
+			HttpServletRequest request){
+		request.setAttribute("appVersion", appVersionService.findAppVersionById(vid));
+		request.setAttribute("appVersionList", appVersionService.findAppVersionsByAPPId(aid));
+		return "dev/appversionmodify";
+	}
+	
+	@RequestMapping("appversionmodifysave.html")
+	public String appVersionModifySava(AppVersion appVersion,
+			@RequestParam(value="attach",required=false)MultipartFile multipartFile,
+			HttpServletRequest request,HttpSession session){
+		String downLoadPath =  null;
+		String apkLocPath =  null;
+		String fileName=null;
+		String url = "dev/appversionmodify";
+		
+		if(!multipartFile.isEmpty()){
+			String path = request.getSession().getServletContext().getRealPath("statics"+java.io.File.separator+"uploadfiles");
+			logger.info("uploadFile path: " + path);
+			String oldFileName = multipartFile.getOriginalFilename();//原文件名
+			String prefix = FilenameUtils.getExtension(oldFileName);//原文件后缀
+			if(prefix.equalsIgnoreCase("apk")){//上传图片格式
+				 fileName = appInfoService.findAppInfoById(appVersion.getAppId()).getSoftwareName()
+						 +appVersion.getVersionNo() + ".apk";//上传LOGO图片命名:apk名称.apk
+				 File targetFile = new File(path,fileName);
+				 if(!targetFile.exists()){
+					 targetFile.mkdirs();
+				 }
+				 try {
+					 multipartFile.transferTo(targetFile);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					request.setAttribute("fileUploadError", "上传文件失败");
+					return url;
+				} 
+				 downLoadPath = request.getContextPath()+"/statics/uploadfiles/"+fileName;
+				 apkLocPath = path+File.separator+fileName;
+			}else{
+				request.setAttribute("fileUploadError", "文件格式不正确");
+				return url;
+			}
+		}
+		DevUser devUser = (DevUser) session.getAttribute(Constants.DEV_USER);
+		appVersion.setModifyBy(devUser.getId());
+		appVersion.setModifyDate(new Date());
+		appVersion.setDownloadLink(downLoadPath);
+		appVersion.setApkLocPath(apkLocPath);
+		appVersion.setApkFileName(fileName);
+		if(appVersionService.updateVersion(appVersion)){
+			return "redirect:/dev/appList.html";
+		}
+		return url;
+	}
+	
+	@RequestMapping("appview.html")
+	public String appView(@RequestParam("id")Integer id,HttpServletRequest request){
+		request.setAttribute("appInfo", appInfoService.findAppInfoById(id));
+		request.setAttribute("appVersionList", appVersionService.findAppVersionsByAPPId(id));
+		return "dev/appinfoview";
+	}
+	
+	@RequestMapping("/sale.json")
+	@ResponseBody
+	public Map<String,String> sale(@RequestParam("appId")Integer appId,
+			@RequestParam("method")String method){
+		Map<String,String> map = new HashMap<String, String>();
+		if(appInfoService.updateAppInfoStatus(appId, method)){
+			map.put("resultMsg", "success");
+		}else{
+			map.put("resultMsg", "failed");
+		}
+		return map;
 	}
 }

@@ -75,4 +75,12 @@ public interface AppInfoService {
 	 * @return
 	 */
 	public boolean updateAppInfo(AppInfo appInfo);
+	
+	/**
+	 * APP上下架
+	 * @param id
+	 * @param method
+	 * @return
+	 */
+	public boolean updateAppInfoStatus(int id,String method);
 }
