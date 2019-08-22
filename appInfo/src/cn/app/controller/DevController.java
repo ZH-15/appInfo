@@ -243,8 +243,8 @@ public class DevController {
 	
 	@RequestMapping("/appinfomodifysave.html")
 	public String addAppModifyInfo(AppInfo appInfo,HttpServletRequest request,HttpSession session,
-			@RequestParam(value="a_logoPicPath",required=false)MultipartFile attach
-			){
+			@RequestParam(value="a_logoPicPath",required=false)MultipartFile attach,
+			@RequestParam(value="status",required=false)Integer status){
 		String logoPicPath =  null;
 		String logoLocPath =  null;
 		String url = "dev/appinfomodify";
@@ -287,10 +287,11 @@ public class DevController {
 			appInfo.setLogoPicPath(logoPicPath);
 		}
 		
-			appInfo.setStatus(1);	
 			appInfo.setModifyBy(devUser.getId());
 			appInfo.setModifyDate(new Date());
-			appInfo.setStatus(1);
+			if(status != null){
+				appInfo.setStatus(status);
+			}
 			if(appInfoService.updateAppInfo(appInfo)){
 				return "redirect:/dev/appList.html";
 			}else{
