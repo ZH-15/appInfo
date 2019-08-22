@@ -83,4 +83,11 @@ public class AppInfoServiceImpl implements AppInfoService {
 		return false;
 	}
 
+	@Override
+	public boolean deleteAppInfo(int id) {
+		if(appInfoMapper.deleteAppInfo(id) != 0){
+			return true;
+		}
+		return false;
+	}
 }

@@ -430,4 +430,45 @@ public class DevController {
 		}
 		return map;
 	}
+	
+	@RequestMapping("/delapp.json")
+	@ResponseBody
+	public Map<String,String> delApp(@RequestParam("id")Integer id){
+		Map<String,String> map = new HashMap<String, String>();
+		//查找APP的所有版本
+		List<AppVersion> appVersions = appVersionService.findAppVersionsByAPPId(id);
+		//循环版本集合删除apk文件
+		for(AppVersion appVersion : appVersions){
+			if(appVersion.getApkLocPath() != null){
+				File file = new File(appVersion.getApkLocPath());
+				if(file.exists()){
+					file.delete(); //删除成功 删除数据库中数据
+				}
+			}
+			if(!appVersionService.deleteVersion(appVersion.getId())){
+				map.put("delResult", "Versionfalse");
+				return map;
+			}
+		}
+		
+		//删除app
+		AppInfo appInfo = appInfoService.findAppInfoById(id);
+		if(appInfo != null){
+			//删除图片
+			if(appInfo.getLogoLocPath() != null){
+				File file = new File(appInfo.getLogoLocPath());
+				if(file.exists()){
+					file.delete();
+				}
+			}
+			if(appInfoService.deleteAppInfo(id)){
+				map.put("delResult", "true");
+			}else{
+				map.put("delResult", "false");
+			}
+		}else{
+			map.put("delResult", "notexist");
+		}
+		return map;
+	}
 }

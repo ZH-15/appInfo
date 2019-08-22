@@ -41,4 +41,11 @@ public interface AppVersionService {
 	 * @return
 	 */
 	public boolean updateVersion(AppVersion appVersion);
+	
+	/**
+	 * 删除版本信息
+	 * @param id
+	 * @return
+	 */
+	public boolean deleteVersion(int id);
 }

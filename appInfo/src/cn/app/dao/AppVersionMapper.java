@@ -41,4 +41,11 @@ public interface AppVersionMapper {
 	 * @return
 	 */
 	public int updateVersion(AppVersion appVersion);
+	
+	/**
+	 * 删除版本信息
+	 * @param id
+	 * @return
+	 */
+	public int deleteVersion(@Param("id")int id);
 }

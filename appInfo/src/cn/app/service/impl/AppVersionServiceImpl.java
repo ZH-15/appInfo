@@ -61,4 +61,12 @@ public class AppVersionServiceImpl implements AppVersionService {
 		return false;
 	}
 
+	@Override
+	public boolean deleteVersion(int id) {
+		if(appVersionMapper.deleteVersion(id) != 0){
+			return true;
+		}
+		return false;
+	}
+
 }

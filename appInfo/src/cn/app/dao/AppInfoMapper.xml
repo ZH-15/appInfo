@@ -153,4 +153,8 @@
  		</set>
 		WHERE id = #{id}
  	</update>
+ 	
+ 	<delete id="deleteAppInfo" parameterType="int">
+ 		DELETE FROM `app_info` WHERE id = #{id}
+ 	</delete>
  </mapper>

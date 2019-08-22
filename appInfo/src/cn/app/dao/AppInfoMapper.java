@@ -95,4 +95,11 @@ public interface AppInfoMapper {
 	 * @return
 	 */
 	public int updateAppInfoStatus(@Param("id")int id,@Param("method")String method);
+	
+	/**
+	 * 删除APP信息
+	 * @param id
+	 * @return
+	 */
+	public int deleteAppInfo(@Param("id")int id);
 }

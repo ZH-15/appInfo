@@ -44,4 +44,8 @@
 		</set>
 		WHERE id=#{id}
  	</update>
+ 	
+ 	<delete id="deleteVersion" parameterType="int">
+ 		DELETE FROM `app_version` WHERE id = #{id}
+ 	</delete>
  </mapper>

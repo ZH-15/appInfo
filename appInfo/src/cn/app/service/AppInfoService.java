@@ -83,4 +83,11 @@ public interface AppInfoService {
 	 * @return
 	 */
 	public boolean updateAppInfoStatus(int id,String method);
+	
+	/**
+	 * 删除APP
+	 * @param id
+	 * @return
+	 */
+	public boolean deleteAppInfo(int id);
 }

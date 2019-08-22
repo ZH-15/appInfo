@@ -172,7 +172,7 @@ $(".deleteApp").on("click",function(){
 	if(confirm("你确定要删除APP应用【"+obj.attr("appsoftwarename")+"】及其所有的版本吗？")){
 		$.ajax({
 			type:"GET",
-			url:"delapp.json",
+			url:"dev/delapp.json",
 			data:{id:obj.attr("appinfoid")},
 			dataType:"json",
 			success:function(data){
@@ -181,6 +181,8 @@ $(".deleteApp").on("click",function(){
 					obj.parents("tr").remove();
 				}else if(data.delResult == "false"){//删除失败
 					alert("对不起，删除AAP应用【"+obj.attr("appsoftwarename")+"】失败");
+				}else if(data.delResult == "Versionfalse"){//删除失败
+					alert("对不起，删除AAP应用【"+obj.attr("appsoftwarename")+"】的版本信息失败");
 				}else if(data.delResult == "notexist"){
 					alert("对不起，APP应用【"+obj.attr("appsoftwarename")+"】不存在");
 				}
